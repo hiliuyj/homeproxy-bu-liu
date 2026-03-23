@@ -55,13 +55,18 @@ jobs:
         env:
           RELEASE_TYPE: ${{ github.event_name }}
         run: |
+          pwd
           pushd .github
+          pwd
           fakeroot bash build-ipk.sh
           # Copy ipk from tmp subdirectory if mv failed
           cp tmp.*/*.ipk . 2>/dev/null || true
           ls -la *.ipk
           echo "ASSET_NAME=$(ls *.ipk | head -1)" >> $GITHUB_ENV
+          pwd
           popd
+          pwd
+          ls -la .github/*.ipk
 
       - name: Publishing to GitHub Artifacts
         uses: actions/upload-artifact@v4
