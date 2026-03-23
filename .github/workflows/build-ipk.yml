@@ -76,7 +76,7 @@ jobs:
         if: github.event_name != 'release'
         with:
           name: ${{ env.ASSET_NAME }}
-          path: .github/*.ipk
+          path: ${{ github.workspace }}/.github/*.ipk
 
       - name: Publishing to GitHub Releases
         uses: svenstaro/upload-release-action@v2
