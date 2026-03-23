@@ -62,7 +62,10 @@ jobs:
           # Copy ipk from tmp subdirectory if mv failed
           cp tmp.*/*.ipk . 2>/dev/null || true
           ls -la *.ipk
-          echo "ASSET_NAME=$(ls *.ipk | head -1)" >> $GITHUB_ENV
+          # Rename to shorter name
+          mv *.ipk homeproxy.ipk
+          ls -la homeproxy.ipk
+          echo "ASSET_NAME=homeproxy.ipk" >> $GITHUB_ENV
           pwd
           popd
           pwd
