@@ -30,6 +30,17 @@ on:
     types:
       - published
 
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        default: 'remove-chinadns-ng'
+        type: choice
+        options:
+          - remove-chinadns-ng
+          - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,6 +48,8 @@ jobs:
     steps:
       - name: Checkout source tree
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Build ipk file
         env:
