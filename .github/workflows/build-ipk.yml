@@ -57,8 +57,9 @@ jobs:
         run: |
           pushd .github
           fakeroot bash build-ipk.sh
-          # Move ipk from tmp subdirectory if needed
-          find . -maxdepth 2 -name "*.ipk" -exec mv {} . \; 2>/dev/null || true
+          # Copy ipk from tmp subdirectory if mv failed
+          cp tmp.*/*.ipk . 2>/dev/null || true
+          ls -la *.ipk
           echo "ASSET_NAME=$(ls *.ipk | head -1)" >> $GITHUB_ENV
           popd
 
