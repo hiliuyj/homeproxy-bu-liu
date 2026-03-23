@@ -394,6 +394,15 @@ if (!isEmpty(main_node)) {
 			server: 'default-dns'
 		});
 
+	/* DNS routing for bypass_mainland_china mode */
+	if (routing_mode === 'bypass_mainland_china') {
+		/* China domains use local DNS */
+		push(config.dns.rules, {
+			rule_set: 'china-list',
+			server: 'default-dns'
+		});
+	}
+
 	if (isEmpty(config.dns.rules))
 		config.dns.rules = null;
 
@@ -641,7 +650,15 @@ if (!isEmpty(main_node)) {
 };
 
 /* Rule set */
-if (routing_mode === 'custom') {
+if (routing_mode === 'bypass_mainland_china') {
+	/* Built-in china-list rule set for DNS routing */
+	push(config.route.rule_set, {
+		type: 'local',
+		tag: 'china-list',
+		format: 'text',
+		path: HP_DIR + '/resources/china_list.txt'
+	});
+} else if (routing_mode === 'custom') {
 	uci.foreach(uciconfig, uciruleset, (cfg) => {
 		if (cfg.enabled !== '1')
 			return null;
