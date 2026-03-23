@@ -57,7 +57,9 @@ jobs:
         run: |
           pushd .github
           fakeroot bash build-ipk.sh
-          echo "ASSET_NAME=$(ls *.ipk)" >> $GITHUB_ENV
+          # Move ipk from tmp subdirectory if needed
+          find . -maxdepth 2 -name "*.ipk" -exec mv {} . \; 2>/dev/null || true
+          echo "ASSET_NAME=$(ls *.ipk | head -1)" >> $GITHUB_ENV
           popd
 
       - name: Publishing to GitHub Artifacts
@@ -65,7 +67,7 @@ jobs:
         if: github.event_name != 'release'
         with:
           name: ${{ env.ASSET_NAME }}
-          path: .github/**/*.ipk
+          path: .github/*.ipk
 
       - name: Publishing to GitHub Releases
         uses: svenstaro/upload-release-action@v2
